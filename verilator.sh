@@ -2,13 +2,13 @@
 
 set -e
 
-VERILATOR_VERSION=5.006
+VERILATOR_VERSION=5.008
 
 sudo apt-get -y install git-buildpackage equivs
 
 git clone https://salsa.debian.org/electronics-team/verilator
 cd verilator
-git checkout debian/${VERILATOR_VERSION}-2
+git checkout debian/${VERILATOR_VERSION}-1
 git checkout -b simple-dev
 git config user.name CI
 git config user.email ci@local
