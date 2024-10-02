@@ -1,0 +1,40 @@
+name: Release
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    tags:
+      - v**
+  pull_request:
+    branches:
+      - main
+jobs:
+  build_verilator:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - run: ./verilator.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release
+          path: verilator*.deb
+
+  release:
+    needs: [build_verilator]
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: release
+          path: hw-devtools
+      - run: tar czf hw-devtools.tar.gz hw-devtools
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          body: New release
+          files: |
+            hw-devtools.tar.gz
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
