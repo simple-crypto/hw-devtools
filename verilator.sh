@@ -2,7 +2,7 @@
 
 set -e
 
-VERILATOR_VERSION=5.008
+VERILATOR_VERSION=5.038
 
 sudo apt-get -y install git-buildpackage equivs
 
